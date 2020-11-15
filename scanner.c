@@ -92,8 +92,14 @@ Token* readNumber(void) {
   while ((currentChar != EOF) && ((charCodes[currentChar] == CHAR_DIGIT) || charCodes[currentChar] == CHAR_PERIOD)) {
     if(charCodes[currentChar] == CHAR_PERIOD)
     {
+
       if(hasPeriod)
-        error(ERR_INVALIDFLOAT, lineNo, colNo);
+      {
+        strcpy(token->string, string);
+        token->string[count] = '\0';
+        token->fValue = atof(token->string);
+        return token;
+      }
 
       hasPeriod = 1;
       free(token);

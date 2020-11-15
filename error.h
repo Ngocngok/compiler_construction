@@ -38,16 +38,16 @@ typedef enum {
 #define ERM_INVALIDCONSTANT "Invalid constant!" //c
 #define ERM_INVALIDTYPE "Invalid type!" //c
 #define ERM_INVALIDBASICTYPE "Invalid basic type!" //c
-#define ERM_INVALIDPARAM "Invalid parameter!" //?
+#define ERM_INVALIDPARAM "Invalid parameter!" //c
 #define ERM_INVALIDSTATEMENT "Invalid statement!" //c
-#define ERM_INVALIDARGUMENTS "Invalid arguments!" //?
+#define ERM_INVALIDARGUMENTS "Invalid arguments!" //c
 #define ERM_INVALIDCOMPARATOR "Invalid comparator!" //c
 #define ERM_INVALIDEXPRESSION "Invalid expression!" //c
 #define ERM_INVALIDTERM "Invalid term!" //c
 #define ERM_INVALIDFACTOR "Invalid factor!" //c 
-#define ERM_INVALIDCONSTDECL "Invalid constant declaration!" //??
-#define ERM_INVALIDTYPEDECL "Invalid type declaration!" //??
-#define ERM_INVALIDVARDECL "Invalid variable declaration!" //?
+#define ERM_INVALIDCONSTDECL "Invalid constant declaration!" //c
+#define ERM_INVALIDTYPEDECL "Invalid type declaration!" //c
+#define ERM_INVALIDVARDECL "Invalid variable declaration!" //c
 #define ERM_INVALIDSUBDECL "Invalid subroutine declaration!"  //?
 #define ERM_INVALIDFLOAT "Invalid float!" //c
 
