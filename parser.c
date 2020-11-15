@@ -90,10 +90,15 @@ void compileConstDecls(void) {
 }
 
 void compileConstDecl(void) {
-  eat(TK_IDENT);
-  eat(SB_EQ);
-  compileConstant();
-  eat(SB_SEMICOLON);
+  if(lookAhead->tokenType == TK_IDENT)
+  {
+    eat(TK_IDENT);
+    eat(SB_EQ);
+    compileConstant();
+    eat(SB_SEMICOLON);
+  }
+  else
+   error(ERR_INVALIDCONSTDECL, lookAhead->lineNo, lookAhead->colNo);
 }
 
 void compileTypeDecls(void) {
@@ -104,10 +109,15 @@ void compileTypeDecls(void) {
 }
 
 void compileTypeDecl(void) {
-  eat(TK_IDENT);
-  eat(SB_EQ);
-  compileType();
-  eat(SB_SEMICOLON);
+  if(lookAhead->tokenType == TK_IDENT)
+  {
+    eat(TK_IDENT);
+    eat(SB_EQ);
+    compileType();
+    eat(SB_SEMICOLON);
+  }
+  else
+    error(ERR_INVALIDTYPEDECL, lookAhead->lineNo, lookAhead->colNo);
 }
 
 void compileVarDecls(void) {
@@ -118,10 +128,15 @@ void compileVarDecls(void) {
 }
 
 void compileVarDecl(void) {
-  eat(TK_IDENT);
-  eat(SB_COLON);
-  compileType();
-  eat(SB_SEMICOLON);
+  if(lookAhead->tokenType == TK_IDENT)
+  {
+    eat(TK_IDENT);
+    eat(SB_COLON);
+    compileType();
+    eat(SB_SEMICOLON);
+  }
+  else 
+    error(ERR_INVALIDVARDECL, lookAhead->lineNo, lookAhead->colNo);
 }
 
 void compileSubDecls(void) {
@@ -270,12 +285,20 @@ void compileBasicType(void) {
   }
 }
 
+
+// error occur when write function() without declare proper parammeters insides
 void compileParams(void) {
   if(lookAhead->tokenType == SB_LPAR)
   {
     eat(SB_LPAR);
-    compileParam();
-    compileParams2();
+    if(lookAhead->tokenType == TK_IDENT || lookAhead->tokenType == KW_VAR)
+    {
+      compileParam();
+      compileParams2();
+    }
+    else
+      error(ERR_INVALIDPARAM, lookAhead->lineNo, lookAhead->colNo);
+    
     eat(SB_RPAR);
   }
 }
@@ -429,8 +452,23 @@ void compileArguments(void) {
   if(lookAhead->tokenType == SB_LPAR)
   {
     eat(SB_LPAR);
-    compileExpression();
-    compileArguments2();
+    switch (lookAhead->tokenType)
+    {
+    case SB_PLUS:
+    case SB_MINUS:
+    case TK_NUMBER:
+    case TK_CHAR:
+    case TK_FLOAT:
+    case TK_IDENT:
+    case SB_LPAR:
+      compileExpression();
+      compileArguments2();
+      break;
+
+    default: error(ERR_INVALIDARGUMENTS, lookAhead->lineNo, lookAhead->colNo);
+      break;
+    }
+    
     eat(SB_RPAR);
   }
 
