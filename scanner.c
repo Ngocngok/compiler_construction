@@ -170,18 +170,42 @@ Token* getToken(void) {
   case CHAR_PLUS: 
     token = makeToken(SB_PLUS, lineNo, colNo);
     readChar(); 
+    if(charCodes[currentChar] == CHAR_EQ)
+    {
+      free(token);
+      token = makeToken(SB_PLUSASSIGN, lineNo - 1, colNo -1);
+      readChar();
+    }
     return token;
   case CHAR_MINUS:
     token = makeToken(SB_MINUS, lineNo, colNo);
     readChar(); 
+    if(charCodes[currentChar] == CHAR_EQ)
+    {
+      free(token);
+      token = makeToken(SB_MINUSASSIGN, lineNo - 1, colNo -1);
+      readChar();
+    }
     return token;
   case CHAR_TIMES:
     token = makeToken(SB_TIMES, lineNo, colNo);
     readChar(); 
+    if(charCodes[currentChar] == CHAR_EQ)
+    {
+      free(token);
+      token = makeToken(SB_TIMESASSIGN, lineNo - 1, colNo -1);
+      readChar();
+    }
     return token;
   case CHAR_SLASH:
     token = makeToken(SB_SLASH, lineNo, colNo);
     readChar(); 
+    if(charCodes[currentChar] == CHAR_EQ)
+    {
+      free(token);
+      token = makeToken(SB_SLASHASSIGN, lineNo - 1, colNo -1);
+      readChar();
+    }
     return token;
   case CHAR_LT:
     ln = lineNo;
@@ -327,6 +351,10 @@ void printToken(Token *token) {
   case SB_PERIOD: printf("SB_PERIOD\n"); break;
   case SB_COMMA: printf("SB_COMMA\n"); break;
   case SB_ASSIGN: printf("SB_ASSIGN\n"); break;
+  case SB_PLUSASSIGN: printf("SB_PLUSASSIGN\n"); break;
+  case SB_MINUSASSIGN: printf("SB_MINUSASSIGN\n"); break;
+  case SB_TIMESASSIGN: printf("SB_TIMESASSIGN\n"); break;
+  case SB_SLASHASSIGN: printf("SB_SLASHASSIGN\n"); break;
   case SB_EQ: printf("SB_EQ\n"); break;
   case SB_NEQ: printf("SB_NEQ\n"); break;
   case SB_LT: printf("SB_LT\n"); break;

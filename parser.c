@@ -377,8 +377,15 @@ void compileAssignSt(void) {
   //variable
   eat(TK_IDENT);
   compileIndexes();
-  eat(SB_ASSIGN);
-  compileExpression();
+  switch(lookAhead->tokenType)
+  {
+    case SB_ASSIGN: eat(SB_ASSIGN); compileExpression(); break;
+    case SB_TIMESASSIGN: eat(SB_TIMESASSIGN); compileExpression();break;
+    case SB_MINUSASSIGN: eat(SB_MINUSASSIGN); compileExpression();break;
+    case SB_PLUSASSIGN: eat(SB_PLUSASSIGN); compileExpression();break;
+    case SB_SLASHASSIGN: eat(SB_SLASHASSIGN); compileExpression();break;
+  }
+  
 
   assert("Assign statement parsed ....");
 }
