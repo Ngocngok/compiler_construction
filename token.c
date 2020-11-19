@@ -94,6 +94,11 @@ char *tokenToString(TokenType tokenType) {
   case SB_PERIOD: return "\'.\'";
   case SB_COMMA: return "\',\'";
   case SB_ASSIGN: return "\':=\'";
+  case SB_PLUSASSIGN: return "\'+=\'";
+  case SB_MINUSASSIGN: return "\'-=\'";
+  case SB_TIMESASSIGN: return "\'*=\'";
+  case SB_SLASHASSIGN: return "\'/=\'";
+
   case SB_EQ: return "\'=\'";
   case SB_NEQ: return "\'!=\'";
   case SB_LT: return "\'<\'";
