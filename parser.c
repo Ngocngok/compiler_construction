@@ -10,6 +10,13 @@
 #include "scanner.h"
 #include "parser.h"
 #include "error.h"
+#include "symtab.h"
+
+extern SymTab* symtab;
+Object* obj;
+Type* t;
+
+  
 
 Token *currentToken;
 Token *lookAhead;
@@ -31,6 +38,13 @@ void eat(TokenType tokenType) {
 void compileProgram(void) {
   assert("Parsing a Program ....");
   eat(KW_PROGRAM);
+
+  //init symtab
+  initSymTab();
+  obj = createProgramObject(lookAhead->string);
+  enterBlock(obj->progAttrs->scope);
+
+
   eat(TK_IDENT);
   eat(SB_SEMICOLON);
   compileBlock();
@@ -92,10 +106,17 @@ void compileConstDecls(void) {
 void compileConstDecl(void) {
   if(lookAhead->tokenType == TK_IDENT)
   {
+    //
+    obj = createConstantObject(lookAhead->string);
+    
+    
     eat(TK_IDENT);
     eat(SB_EQ);
+    //
+    obj->constAttrs->value = makeIntConstant(atoi(lookAhead->string));
     compileConstant();
     eat(SB_SEMICOLON);
+    declareObject(obj);
   }
   else
    error(ERR_INVALIDCONSTDECL, lookAhead->lineNo, lookAhead->colNo);
@@ -111,9 +132,31 @@ void compileTypeDecls(void) {
 void compileTypeDecl(void) {
   if(lookAhead->tokenType == TK_IDENT)
   {
+    obj = createTypeObject(lookAhead->string);
+    
     eat(TK_IDENT);
     eat(SB_EQ);
+    switch (lookAhead->tokenType)
+    {
+    case KW_INTEGER:
+      obj->typeAttrs->actualType = makeIntType();
+      declareObject(obj);
+      break;
+    
+    case KW_FLOAT:
+      obj->typeAttrs->actualType = makeFloatType();
+      declareObject(obj);
+      break;
+
+    case KW_CHAR:
+      obj->typeAttrs->actualType = makeCharType();
+      declareObject(obj);
+      break;
+    default:
+      break;
+    }
     compileType();
+    
     eat(SB_SEMICOLON);
   }
   else
@@ -130,8 +173,31 @@ void compileVarDecls(void) {
 void compileVarDecl(void) {
   if(lookAhead->tokenType == TK_IDENT)
   {
+    obj = createVariableObject(lookAhead->string);
+    
     eat(TK_IDENT);
     eat(SB_COLON);
+    switch (lookAhead->tokenType)
+    {
+    case KW_INTEGER:
+      obj->varAttrs->type = makeIntType();
+      declareObject(obj);
+      break;
+    
+    case KW_FLOAT:
+      obj->varAttrs->type = makeFloatType();
+      declareObject(obj);
+      break;
+
+    case KW_CHAR:
+      obj->varAttrs->type = makeCharType();
+      declareObject(obj);
+      break;
+    default:
+      break;
+    }
+
+    
     compileType();
     eat(SB_SEMICOLON);
   }
@@ -179,12 +245,23 @@ void compileProcDecl(void) {
 
   if(lookAhead->tokenType == KW_PROCEDURE)
   {
+   
+
+
     eat(KW_PROCEDURE);
+
+    obj = createProcedureObject(lookAhead->string);
+    declareObject(obj);
+    enterBlock(obj->procAttrs->scope);
+
     eat(TK_IDENT);
     compileParams();
     eat(SB_SEMICOLON);
     compileBlock();
     eat(SB_SEMICOLON);
+
+
+    exitBlock();
   }
   else return;
 
@@ -307,9 +384,27 @@ void compileParams2(void) {
   while(lookAhead->tokenType == SB_SEMICOLON)
   {
     eat(SB_SEMICOLON);
+
+    obj = createParameterObject(lookAhead->string, PARAM_VALUE, symtab->currentScope->owner);
+    
     eat(TK_IDENT);
     eat(SB_COLON);
     compileBasicType();
+    if(currentToken->tokenType == KW_INTEGER)
+    {
+      obj->paramAttrs->type = makeIntType();
+      declareObject(obj);
+    }
+    else if(currentToken->tokenType == KW_CHAR)
+    {
+      obj->paramAttrs->type = makeCharType();
+      declareObject(obj);
+    }
+    else
+    {
+      obj->paramAttrs->type = makeFloatType();
+      declareObject(obj);
+    }
   }
 }
 
@@ -318,10 +413,28 @@ void compileParam(void) {
   {
     eat(KW_VAR);
   }
+  obj = createParameterObject(lookAhead->string, PARAM_VALUE, symtab->currentScope->owner);
+  
   eat(TK_IDENT);
+  
   eat(SB_COLON);
   compileBasicType();
-
+  if(currentToken->tokenType == KW_INTEGER)
+  {
+    obj->paramAttrs->type = makeIntType();
+    declareObject(obj);
+  }
+  else if(currentToken->tokenType == KW_CHAR)
+  {
+    obj->paramAttrs->type = makeCharType();
+    declareObject(obj);
+  }
+  else
+  {
+    obj->paramAttrs->type = makeFloatType();
+    declareObject(obj);
+  }
+  
 }
 
 void compileStatements(void) {
