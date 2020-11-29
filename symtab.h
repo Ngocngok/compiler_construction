@@ -147,7 +147,7 @@ void freeType(Type* type);
 
 ConstantValue* makeIntConstant(int i);
 ConstantValue* makeCharConstant(char ch);
-ConstantValue* makeFloatConstant(double fl);
+ConstantValue* makeFloatConstant(float fl);
 ConstantValue* duplicateConstantValue(ConstantValue* v);
 
 Scope* createScope(Object* owner, Scope* outer);

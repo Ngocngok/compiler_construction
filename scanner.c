@@ -147,6 +147,7 @@ Token* readConstChar(void) {
   }
 
   if (charCodes[currentChar] == CHAR_SINGLEQUOTE) {
+    token->value = token->string[0];
     readChar();
     return token;
   } else {
@@ -295,9 +296,9 @@ void printToken(Token *token) {
   switch (token->tokenType) {
   case TK_NONE: printf("TK_NONE\n"); break;
   case TK_IDENT: printf("TK_IDENT(%s)\n", token->string); break;
-  case TK_NUMBER: printf("TK_NUMBER(%s)\n", token->string); break;
-  case TK_CHAR: printf("TK_CHAR(\'%s\')\n", token->string); break;
-  case TK_FLOAT: printf("TK_FLOAT(%s)\n", token->string); break;
+  case TK_NUMBER: printf("TK_NUMBER(%d)\n", token->value); break;
+  case TK_CHAR: printf("TK_CHAR(\'%c\')\n", token->value); break;
+  case TK_FLOAT: printf("TK_FLOAT(%f)\n", token->fValue); break;
   case TK_EOF: printf("TK_EOF\n"); break;
 
   case KW_PROGRAM: printf("KW_PROGRAM\n"); break;

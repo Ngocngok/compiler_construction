@@ -17,6 +17,7 @@ void freeReferenceList(ObjectNode *objList);
 SymTab* symtab;
 Type* intType;
 Type* charType;
+Type* floatType;
 
 /******************* Type utilities ******************************/
 
@@ -93,7 +94,7 @@ ConstantValue* makeCharConstant(char ch) {
   return constantValue;
 }
 
-ConstantValue* makeFloatConstant(double fl) {
+ConstantValue* makeFloatConstant(float fl) {
   ConstantValue * constantValue = (ConstantValue*) malloc(sizeof(ConstantValue));
   constantValue->type = TP_FLOAT;
   constantValue->floatValue = fl;
@@ -105,8 +106,10 @@ ConstantValue* duplicateConstantValue(ConstantValue* v) {
   constantValue->type = v->type;
   if(constantValue->type == TP_INT)
     constantValue->intValue = v->intValue;
-  else
+  else if(constantValue->type == TP_CHAR)
     constantValue->charValue = v->charValue;
+  else
+    constantValue->floatValue = v->floatValue;
   
   return constantValue;
 }
