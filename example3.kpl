@@ -1,5 +1,5 @@
 PROGRAM  EXAMPLE3;  (* TOWER OF HANOI *)
-Const  MAX = 2;
+Const  MAX = +1260;
 VAR  I:INTEGER;  
      M:INTEGER;  
      P:INTEGER;  
@@ -8,6 +8,7 @@ VAR  I:INTEGER;
      D:FLOAT;
 
 PROCEDURE  HANOI(A:INTEGER;  Z:INTEGER);
+Var A : INTEGER;
 BEGIN
   IF  N = 0  THEN
     BEGIN

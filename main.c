@@ -12,6 +12,7 @@
 #include "reader.h"
 #include "parser.h"
 #include "symtab.h"
+#include "debug.h"
 
 extern SymTab* symtab;
 
@@ -28,6 +29,7 @@ int main(int argc, char *argv[]) {
 
   
   printObject(symtab->program,0);
+  cleanSymTab();
     
   return 0;
 }
