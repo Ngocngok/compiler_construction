@@ -1,14 +1,9 @@
 PROGRAM  EXAMPLE4;  (* Example 4 *)
-CONST MAX = 3;
-      MAX2 = MAX;
-TYPE C = INTEGER;
-     T = CHAR;
-     D = ARRAY(. 3 .) OF C;
-     E = INTEGER;
-         
-VAR  A : ARRAY(. 10 .) OF ARRAY(. 5 .) OF D;
+CONST MAX = 100.0;
+TYPE T = INTEGER;
+VAR  A : ARRAY(. 10 .) OF T;
      N : INTEGER;
-     CH : T;
+     CH : CHAR;
 
 PROCEDURE INPUT;
 VAR I : INTEGER;
