@@ -27,9 +27,7 @@ typedef enum {
   ERR_INVALIDTYPEDECL,
   ERR_INVALIDVARDECL,
   ERR_INVALIDSUBDECL,
-  ERR_INVALIDFLOAT,
-  ERR_UNDECLARED_TYPE,
-  ERR_UNDECLARED_IDENT
+  ERR_INVALIDFLOAT
 } ErrorCode;
 
 
@@ -52,8 +50,6 @@ typedef enum {
 #define ERM_INVALIDVARDECL "Invalid variable declaration!" //c
 #define ERM_INVALIDSUBDECL "Invalid subroutine declaration!"  //?
 #define ERM_INVALIDFLOAT "Invalid float!" //c
-#define ERM_UNDECLARED_TYPE "Undeclared type!" //c
-#define ERM_UNDECLARED_IDENT "Undeclared identifier!" //c
 
 void error(ErrorCode err, int lineNo, int colNo);
 void missingToken(TokenType tokenType, int lineNo, int colNo);

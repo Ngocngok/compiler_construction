@@ -67,13 +67,6 @@ void error(ErrorCode err, int lineNo, int colNo) {
   case ERR_INVALIDSUBDECL:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDSUBDECL);
     break;
-  case ERR_UNDECLARED_TYPE:
-    printf("%d-%d:%s\n", lineNo, colNo, ERM_UNDECLARED_TYPE);
-    break;
-  case ERR_UNDECLARED_IDENT:
-    printf("%d-%d:%s\n", lineNo, colNo, ERM_UNDECLARED_IDENT);
-    break;
-
   }
   exit(0);
 }
