@@ -20,9 +20,6 @@ void printType(Type* type) {
   case TP_CHAR:
     printf("Char");
     break;
-  case TP_FLOAT:
-    printf("Float");
-    break;
   case TP_ARRAY:
     printf("Arr(%d,",type->arraySize);
     printType(type->elementType);
@@ -39,8 +36,6 @@ void printConstantValue(ConstantValue* value) {
   case TP_CHAR:
     printf("\'%c\'",value->charValue);
     break;
-  case TP_FLOAT:
-    printf("%f", value->floatValue);
   default:
     break;
   }

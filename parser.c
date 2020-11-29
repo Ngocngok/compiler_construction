@@ -5,19 +5,11 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "reader.h"
 #include "scanner.h"
 #include "parser.h"
 #include "error.h"
-#include "symtab.h"
-
-extern SymTab* symtab;
-Object* obj;
-Type* t;
-
-  
 
 Token *currentToken;
 Token *lookAhead;
@@ -39,13 +31,6 @@ void eat(TokenType tokenType) {
 void compileProgram(void) {
   assert("Parsing a Program ....");
   eat(KW_PROGRAM);
-
-  //init symtab
-  initSymTab();
-  obj = createProgramObject(lookAhead->string);
-  enterBlock(obj->progAttrs->scope);
-
-
   eat(TK_IDENT);
   eat(SB_SEMICOLON);
   compileBlock();
@@ -107,16 +92,10 @@ void compileConstDecls(void) {
 void compileConstDecl(void) {
   if(lookAhead->tokenType == TK_IDENT)
   {
-    //
-    obj = createConstantObject(lookAhead->string);
-    
-    
     eat(TK_IDENT);
     eat(SB_EQ);
-
     compileConstant();
     eat(SB_SEMICOLON);
-    declareObject(obj);
   }
   else
    error(ERR_INVALIDCONSTDECL, lookAhead->lineNo, lookAhead->colNo);
@@ -132,15 +111,9 @@ void compileTypeDecls(void) {
 void compileTypeDecl(void) {
   if(lookAhead->tokenType == TK_IDENT)
   {
-    obj = createTypeObject(lookAhead->string);
-    
     eat(TK_IDENT);
     eat(SB_EQ);
     compileType();
-
-    obj->typeAttrs->actualType = t;
-    declareObject(obj);
-    
     eat(SB_SEMICOLON);
   }
   else
@@ -157,14 +130,9 @@ void compileVarDecls(void) {
 void compileVarDecl(void) {
   if(lookAhead->tokenType == TK_IDENT)
   {
-    obj = createVariableObject(lookAhead->string);
-    
     eat(TK_IDENT);
     eat(SB_COLON);
     compileType();
-
-    obj->varAttrs->type = t;
-    declareObject(obj);
     eat(SB_SEMICOLON);
   }
   else 
@@ -192,37 +160,14 @@ void compileFuncDecl(void) {
 
   if(lookAhead->tokenType == KW_FUNCTION)
   {
-
     eat(KW_FUNCTION);
-
-    obj = createFunctionObject(lookAhead->string);
-    declareObject(obj);
-
-    //{
-    enterBlock(obj->funcAttrs->scope);
-
     eat(TK_IDENT);
     compileParams();
     eat(SB_COLON);
     compileBasicType();
-    if(currentToken->tokenType == KW_INTEGER)
-    {
-      symtab->currentScope->owner->funcAttrs->returnType = makeIntType();
-    }
-    else if(currentToken->tokenType == KW_CHAR)
-    {
-      symtab->currentScope->owner->funcAttrs->returnType = makeCharType();
-    }
-    else
-    {
-      symtab->currentScope->owner->funcAttrs->returnType = makeFloatType();
-    }
     eat(SB_SEMICOLON);
     compileBlock();
     eat(SB_SEMICOLON);
-    
-    exitBlock();
-    //}
   }
   else return;
 
@@ -234,25 +179,12 @@ void compileProcDecl(void) {
 
   if(lookAhead->tokenType == KW_PROCEDURE)
   {
-   
-
-
     eat(KW_PROCEDURE);
-
-    obj = createProcedureObject(lookAhead->string);
-    declareObject(obj);
-
-    //{
-    enterBlock(obj->procAttrs->scope);
-
     eat(TK_IDENT);
     compileParams();
     eat(SB_SEMICOLON);
     compileBlock();
     eat(SB_SEMICOLON);
-
-    exitBlock();
-    //}
   }
   else return;
 
@@ -289,7 +221,6 @@ void compileConstant(void) {
     break;
   case TK_CHAR:
     eat(TK_CHAR);
-    obj->constAttrs->value = makeCharConstant(currentToken->value);
     break;
   default:
     compileConstant2();
@@ -302,42 +233,12 @@ void compileConstant2(void) {
   {
   case TK_FLOAT:
     eat(TK_FLOAT);
-    obj->constAttrs->value = makeFloatConstant(currentToken->fValue);
     break;
-  case TK_IDENT: //what this //this is this
+  case TK_IDENT: //what this ?
     eat(TK_IDENT);
-
-    Scope *tmpS = symtab->currentScope;
-    Object *tmpO;
-    int found = 0;
-    while(tmpS != NULL)
-    {
-      tmpO = findObject(symtab->currentScope->objList, currentToken->string);
-      if(tmpO != NULL)
-      {
-        if(tmpO->constAttrs != NULL)
-        {
-          found = 1;
-          break;
-        }
-      }
-      tmpS = symtab->currentScope->outer;
-    }
-
-    if(found)
-    {
-      obj->constAttrs->value = tmpO->constAttrs->value;
-    } 
-    else
-    {
-      error(ERR_UNDECLARED_IDENT, currentToken->lineNo, currentToken->colNo);
-    }
-
-
     break;
   case TK_NUMBER:
     eat(TK_NUMBER);
-    obj->constAttrs->value = makeIntConstant(currentToken->value);
     break;
   default:
     error(ERR_INVALIDCONSTANT, lookAhead->lineNo, lookAhead->colNo);
@@ -348,65 +249,21 @@ void compileConstant2(void) {
 void compileType(void) {
   switch (lookAhead->tokenType)
   {
-  case KW_FLOAT: 
-    eat(KW_FLOAT);
-    //obj->varAttrs->type = makeFloatType();
-    //declareObject(obj);
-    t = makeFloatType();
+  case KW_FLOAT: eat(KW_FLOAT);
     break;
-  case KW_INTEGER:
-    eat(KW_INTEGER);
-    //obj->varAttrs->type = makeIntType();
-    //declareObject(obj);
-    t = makeIntType();
+  case KW_INTEGER: eat(KW_INTEGER);
     break;
-  case KW_CHAR: 
-    eat(KW_CHAR);
-    //obj->varAttrs->type = makeCharType();
-    //declareObject(obj);
-    t = makeCharType();
+  case KW_CHAR: eat(KW_CHAR);
     break;
   case TK_IDENT: eat(TK_IDENT);
-    //Find in typeDeclare
-
-    Scope *tmpS = symtab->currentScope;
-    Object *tmpO;
-    int found = 0;
-    while(tmpS != NULL)
-    {
-      tmpO = findObject(symtab->currentScope->objList, currentToken->string);
-      if(tmpO != NULL)
-      {
-        if(tmpO->typeAttrs != NULL)
-        {
-          found = 1;
-          break;
-        }
-      }
-      tmpS = symtab->currentScope->outer;
-    }
-
-    if(found)
-    {
-      t =  tmpO->typeAttrs->actualType;
-    } 
-    else
-    {
-      error(ERR_UNDECLARED_TYPE, currentToken->lineNo, currentToken->colNo);
-    }
-    
-
     break;
   case KW_ARRAY:
     eat(KW_ARRAY);
     eat(SB_LSEL);
-    int cnt = lookAhead->value;
     eat(TK_NUMBER);
     eat(SB_RSEL);
     eat(KW_OF);
     compileType();
-    t = makeArrayType(cnt, t);
-    
     break;
   default:
     error(ERR_INVALIDTYPE, lookAhead->lineNo, lookAhead->colNo);
@@ -418,13 +275,10 @@ void compileBasicType(void) {
   switch (lookAhead->tokenType)
   {
   case KW_INTEGER: eat(KW_INTEGER);
-    //symtab->currentScope->owner->funcAttrs->returnType = makeIntType();
     break;
   case KW_CHAR: eat(KW_CHAR);
-    //symtab->currentScope->owner->funcAttrs->returnType = makeCharType();
     break;
   case KW_FLOAT: eat(KW_FLOAT);
-    //symtab->currentScope->owner->funcAttrs->returnType = makeFloatType();
     break;
   default:
     error(ERR_INVALIDBASICTYPE, lookAhead->lineNo, lookAhead->colNo);
@@ -453,27 +307,9 @@ void compileParams2(void) {
   while(lookAhead->tokenType == SB_SEMICOLON)
   {
     eat(SB_SEMICOLON);
-
-    obj = createParameterObject(lookAhead->string, PARAM_VALUE, symtab->currentScope->owner);
-    
     eat(TK_IDENT);
     eat(SB_COLON);
     compileBasicType();
-    if(currentToken->tokenType == KW_INTEGER)
-    {
-      obj->paramAttrs->type = makeIntType();
-      declareObject(obj);
-    }
-    else if(currentToken->tokenType == KW_CHAR)
-    {
-      obj->paramAttrs->type = makeCharType();
-      declareObject(obj);
-    }
-    else
-    {
-      obj->paramAttrs->type = makeFloatType();
-      declareObject(obj);
-    }
   }
 }
 
@@ -482,28 +318,10 @@ void compileParam(void) {
   {
     eat(KW_VAR);
   }
-  obj = createParameterObject(lookAhead->string, PARAM_VALUE, symtab->currentScope->owner);
-  
   eat(TK_IDENT);
-  
   eat(SB_COLON);
   compileBasicType();
-  if(currentToken->tokenType == KW_INTEGER)
-  {
-    obj->paramAttrs->type = makeIntType();
-    declareObject(obj);
-  }
-  else if(currentToken->tokenType == KW_CHAR)
-  {
-    obj->paramAttrs->type = makeCharType();
-    declareObject(obj);
-  }
-  else
-  {
-    obj->paramAttrs->type = makeFloatType();
-    declareObject(obj);
-  }
-  
+
 }
 
 void compileStatements(void) {
