@@ -31,7 +31,7 @@ typedef struct {
   char string[MAX_IDENT_LEN + 1];
   int lineNo, colNo;
   TokenType tokenType;
-  int value;
+  int value; //for both char and int
   float fValue;
 } Token;
 
