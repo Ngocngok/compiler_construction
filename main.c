@@ -5,12 +5,16 @@
  */
 
 
-/*
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "reader.h"
 #include "parser.h"
+#include "symtab.h"
+#include "debug.h"
+
+extern SymTab* symtab;
 
 int main(int argc, char *argv[]) {
   if (argc <= 1) {
@@ -22,12 +26,16 @@ int main(int argc, char *argv[]) {
     printf("Can\'t read input file!\n");
     return -1;
   }
+
+  
+  printObject(symtab->program,0);
+  cleanSymTab();
     
   return 0;
 }
-*/
 
 
+/*
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -35,14 +43,16 @@ int main(int argc, char *argv[]) {
 #include "debug.h"
 
 extern SymTab* symtab;
-/******************************************************************/
+******************************************************************
 
 int main() {
+  
   Object* obj;
 
   Type* t1,* t2;
 
   initSymTab();
+  
 
   obj = createProgramObject("PRG");
   enterBlock(obj->progAttrs->scope);
@@ -51,8 +61,8 @@ int main() {
   obj->constAttrs->value = makeIntConstant(10);
   declareObject(obj);
 
-  obj = createConstantObject("c2");
-  obj->constAttrs->value = makeCharConstant('a');
+  obj = createConstantObject("f1");
+  obj->constAttrs->value = makeFloatConstant(1.47f);
   declareObject(obj);
 
   obj = createTypeObject("t1");
@@ -76,11 +86,10 @@ int main() {
     obj = createParameterObject("p1", PARAM_VALUE, symtab->currentScope->owner);
     obj->paramAttrs->type = makeIntType();
     declareObject(obj);
-
+    
     obj = createParameterObject("p2", PARAM_REFERENCE, symtab->currentScope->owner);
     obj->paramAttrs->type = makeCharType();
     declareObject(obj);
-
     exitBlock();
 
   obj = createProcedureObject("p");
@@ -130,3 +139,4 @@ int main() {
     
   return 0;
 }
+*/
