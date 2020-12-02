@@ -450,39 +450,32 @@ void compileParams(void) {
 }
 
 void compileParams2(void) {
-  while(lookAhead->tokenType == SB_SEMICOLON)
+  switch(lookAhead->tokenType)
   {
-    eat(SB_SEMICOLON);
+    case SB_SEMICOLON:
+      eat(SB_SEMICOLON);
+      compileParam();
+      compileParams2();
+      break;
 
-    obj = createParameterObject(lookAhead->string, PARAM_VALUE, symtab->currentScope->owner);
-    
-    eat(TK_IDENT);
-    eat(SB_COLON);
-    compileBasicType();
-    if(currentToken->tokenType == KW_INTEGER)
-    {
-      obj->paramAttrs->type = makeIntType();
-      declareObject(obj);
-    }
-    else if(currentToken->tokenType == KW_CHAR)
-    {
-      obj->paramAttrs->type = makeCharType();
-      declareObject(obj);
-    }
-    else
-    {
-      obj->paramAttrs->type = makeFloatType();
-      declareObject(obj);
-    }
+    case SB_RPAR:
+      break;
+
+    default:
+      error(ERR_INVALIDPARAM, lookAhead->lineNo, lookAhead->colNo);
   }
 }
 
 void compileParam(void) {
+
+  obj = createParameterObject(lookAhead->string, PARAM_VALUE, symtab->currentScope->owner);
   if(lookAhead->tokenType == KW_VAR)
   {
     eat(KW_VAR);
+    obj = createParameterObject(lookAhead->string, PARAM_REFERENCE, symtab->currentScope->owner);
+
   }
-  obj = createParameterObject(lookAhead->string, PARAM_VALUE, symtab->currentScope->owner);
+  
   
   eat(TK_IDENT);
   
