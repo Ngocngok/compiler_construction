@@ -856,6 +856,7 @@ void compileIndexes(void) {
     eat(SB_LSEL);
     compileExpression();
     eat(SB_RSEL);
+    compileIndexes();
   }
 }
 
