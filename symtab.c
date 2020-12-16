@@ -184,6 +184,7 @@ Object* createProcedureObject(char *name) {
   procedure->procAttrs = (ProcedureAttributes*) malloc(sizeof(ProcedureAttributes));
   procedure->procAttrs->scope = createScope(procedure, symtab->currentScope);
   procedure->procAttrs->paramList = NULL;
+
   return procedure;
 }
 

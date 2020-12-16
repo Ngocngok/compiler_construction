@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "reader.h"
 #include "charcode.h"
@@ -52,12 +53,12 @@ Token* readIdentKeyword(void) {
   Token *token = makeToken(TK_NONE, lineNo, colNo);
   int count = 1;
 
-  token->string[0] = (char)currentChar;
+  token->string[0] = (char)toupper(currentChar);
   readChar();
 
   while ((currentChar != EOF) && 
 	 ((charCodes[currentChar] == CHAR_LETTER) || (charCodes[currentChar] == CHAR_DIGIT))) {
-    if (count <= MAX_IDENT_LEN) token->string[count++] = (char)currentChar;
+    if (count <= MAX_IDENT_LEN) token->string[count++] = (char)toupper(currentChar);
     readChar();
   }
 

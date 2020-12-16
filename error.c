@@ -31,6 +31,9 @@ void error(ErrorCode err, int lineNo, int colNo) {
   case ERR_INVALIDTYPE:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDTYPE);
     break;
+  case ERR_INVALIDVAR:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDVAR);
+    break;
   case ERR_INVALIDBASICTYPE:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDBASICTYPE);
     break;
@@ -67,11 +70,47 @@ void error(ErrorCode err, int lineNo, int colNo) {
   case ERR_INVALIDSUBDECL:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDSUBDECL);
     break;
+  case ERR_INVALIDFUNCTION:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDFUNCTION);
+    break;
+  case ERR_INVALIDPROCEDURE:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDPROCEDURE);
+    break;
   case ERR_UNDECLARED_TYPE:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_UNDECLARED_TYPE);
     break;
   case ERR_UNDECLARED_IDENT:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_UNDECLARED_IDENT);
+    break;
+  case ERR_INVALID_LVALUE:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALID_LVALUE);
+    break;
+  case ERR_INVALID_ARGUMENTS:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALID_ARGUMENTS);
+    break;
+  case ERR_UNDECLARED_CONSTANT:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_UNDECLARED_CONSTANT);
+    break;
+  case ERR_UNDECLARED_INT_CONSTANT:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_UNDECLARED_INT_CONSTANT);
+    break;
+  case ERR_UNDECLARED_VARIABLE:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_UNDECLARED_VARIABLE);
+    break;
+  case ERR_UNDECLARED_FUNCTION:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_UNDECLARED_FUNCTION);
+    break;
+  case ERR_UNDECLARED_PROCEDURE:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_UNDECLARED_PROCEDURE);
+    break;
+  case ERR_DUPLICATE_IDENT:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_DUPLICATE_IDENT);
+    break;
+  case ERR_TYPE_INCONSISTENCY:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_TYPE_INCONSISTENCY);
+    break;
+  case ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_PARAMETERS_ARGUMENTS_INCONSISTENCY);
     break;
 
   }
