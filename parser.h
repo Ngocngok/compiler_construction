@@ -44,17 +44,18 @@ void compileIfSt(void);
 void compileElseSt(void);
 void compileWhileSt(void);
 void compileForSt(void);
-void compileArguments(void);
-void compileArguments2(void);
+void compileArguments(Object* procedure);
+void compileArguments2(ObjectNode* objectNode);
 void compileCondition(void);
-void compileCondition2(void);
-void compileExpression(void);
-void compileExpression2(void);
-void compileExpression3(void);
-void compileTerm(void);
-void compileTerm2(void);
-void compileFactor(void);
-void compileIndexes(void);
+Type* compileCondition2(void);
+Type* compileExpression(void);
+Type* compileExpression2(void);
+Type* compileExpression3(void);
+Type* compileTerm(void);
+Type* compileTerm2(Type* previousType);
+Type* compileFactor(void);
+Type* compileIndexes(Type* arrayType);
+Type* compileLValue(void);
 
 int compile(char *fileName);
 

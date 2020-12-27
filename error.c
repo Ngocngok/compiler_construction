@@ -112,7 +112,13 @@ void error(ErrorCode err, int lineNo, int colNo) {
   case ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_PARAMETERS_ARGUMENTS_INCONSISTENCY);
     break;
-
+    case ERR_EXPECTED_ASSIGN_SYMBOL:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_EXPECTED_ASSIGN_SYMBOL);
+    break;
+    case ERR_NO_RETURNE_VALUE:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_NO_RETURNE_VALUE);
+    break;
+    
   }
   exit(0);
 }

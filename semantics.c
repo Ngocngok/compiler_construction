@@ -199,3 +199,79 @@ Object* checkDeclaredLValueIdent(char* name)
 
     return object;
 }
+
+
+void checkIntType(Type* type) {
+    if(type->typeClass != TP_INT)
+    {
+        error(ERR_TYPE_INCONSISTENCY,currentToken->lineNo, currentToken->colNo);
+    }
+}
+
+void checkCharType(Type* type) {
+    if(type->typeClass != TP_CHAR)
+    {
+        error(ERR_TYPE_INCONSISTENCY,currentToken->lineNo, currentToken->colNo);
+    }
+}
+
+void checkFloatType(Type* type) {
+    if(type->typeClass != TP_FLOAT)
+    {
+        error(ERR_TYPE_INCONSISTENCY,currentToken->lineNo, currentToken->colNo);
+    }
+}
+
+void checkAllowedTypeForExp(Type* type) {
+    switch (type->typeClass)
+    {
+    case TP_INT:
+    case TP_FLOAT:
+        break;
+    default: error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+        break;
+    }
+}
+
+void checkAllowedTypeForConst(enum TypeClass type) {
+    switch (type)
+    {
+    case TP_INT:
+    case TP_FLOAT:
+        break;
+    default: error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+        break;
+    }
+}
+
+void checkBasicType(Type* type) {
+    switch (type->typeClass)
+    {
+    case TP_INT:
+    case TP_FLOAT:
+    case TP_CHAR:
+        break;
+    default: error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+        break;
+    }
+}
+
+void checkArrayType(Type* type) {
+  // TODO
+}
+
+void checkTypeEquality(Type* type1, Type* type2) 
+{
+    if(type1->typeClass != type2->typeClass)
+    {
+        error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+    }
+}
+
+void checkParamArg(Type* type1, Type* type2)
+{
+    if(type1->typeClass != type2->typeClass)
+    {
+        error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+    }
+}

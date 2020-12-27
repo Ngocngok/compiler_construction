@@ -42,7 +42,9 @@ typedef enum {
   ERR_UNDECLARED_PROCEDURE,
   ERR_DUPLICATE_IDENT,
   ERR_TYPE_INCONSISTENCY,
-  ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY
+  ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY,
+  ERR_EXPECTED_ASSIGN_SYMBOL,
+  ERR_NO_RETURNE_VALUE
 } ErrorCode;
 
 
@@ -79,8 +81,9 @@ typedef enum {
 #define ERM_UNDECLARED_PROCEDURE "Undeclared procedure."
 #define ERM_DUPLICATE_IDENT "Duplicate identifier."
 #define ERM_TYPE_INCONSISTENCY "Type inconsistency"
-#define ERM_PARAMETERS_ARGUMENTS_INCONSISTENCY "The number of arguments and the number of parameters are inconsistent."
-
+#define ERM_PARAMETERS_ARGUMENTS_INCONSISTENCY "Parameters and arguments inconsistent!"
+#define ERM_EXPECTED_ASSIGN_SYMBOL "Expect an assign symbol!"
+#define ERM_NO_RETURNE_VALUE "No value returned in current function!"
 
 
 void error(ErrorCode err, int lineNo, int colNo);
