@@ -8,6 +8,7 @@
 #include <string.h>
 #include "semantics.h"
 #include "error.h"
+#include "stdio.h"
 
 extern SymTab* symtab;
 extern Token* currentToken;
@@ -188,6 +189,7 @@ Object* checkDeclaredLValueIdent(char* name)
         case OBJ_PARAMETER:
             if (object->paramAttrs->function != symtab->currentScope->owner)
             {
+                printf("%s %s", object->paramAttrs->function->name, symtab->currentScope->owner->name);
                 error(ERR_INVALID_LVALUE, currentToken->lineNo, currentToken->colNo);
             }
             break;

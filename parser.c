@@ -519,6 +519,9 @@ Type* compileLValue(void)
     lValueObject = checkDeclaredLValueIdent(currentToken->string);
     switch (lValueObject->kind)
     {
+    case OBJ_PARAMETER:
+      lValueType = lValueObject->paramAttrs->type;
+      break;
     case OBJ_FUNCTION:
       lValueType = lValueObject->funcAttrs->returnType;
       checkReturnValue = 1;
@@ -657,6 +660,7 @@ void compileArguments(Object* object) {
       objectNode = object->funcAttrs->paramList;
       type2 = objectNode->object->paramAttrs->type;
     }
+    else return;
     break;
   case OBJ_PROCEDURE:
     if(object->procAttrs->paramList != NULL)
@@ -664,14 +668,14 @@ void compileArguments(Object* object) {
       objectNode = object->procAttrs->paramList;
       type2 = objectNode->object->paramAttrs->type;
     }
+    else return;
     break;
   default:
     break;
   }
   
-  
-  if(lookAhead->tokenType == SB_LPAR)
-  {
+  // if(lookAhead->tokenType == SB_LPAR)
+  // {
     eat(SB_LPAR);
     switch (lookAhead->tokenType)
     {
@@ -692,28 +696,48 @@ void compileArguments(Object* object) {
     }
     
     eat(SB_RPAR);
-  }
+  // }
 
 }
+
+// void compileArguments2(ObjectNode* objectNode) {
+//   Type* type1 = NULL;
+//   Type* type2 = NULL;
+//   if(objectNode != NULL)
+//     type1 = objectNode->object->paramAttrs->type;
+//   switch(lookAhead->tokenType)
+//   {
+//     case SB_COMMA:  
+//       eat(SB_COMMA);
+//       type2 = compileExpression();
+//       checkParamArg(type1, type2);
+//       compileArguments2(objectNode->next);
+//       break;
+//     case SB_RPAR:
+//       break;
+//     default : error(ERR_INVALIDARGUMENTS, lookAhead->lineNo, lookAhead->colNo);
+//   }
+// }
 
 void compileArguments2(ObjectNode* objectNode) {
   Type* type1 = NULL;
   Type* type2 = NULL;
   if(objectNode != NULL)
-    type1 = objectNode->object->paramAttrs->type;
-  switch(lookAhead->tokenType)
   {
-    case SB_COMMA:  
-      eat(SB_COMMA);
-      type2 = compileExpression();
-      checkParamArg(type1, type2);
-      compileArguments2(objectNode->next);
-      break;
-    case SB_RPAR:
-      break;
-    default : error(ERR_INVALIDARGUMENTS, lookAhead->lineNo, lookAhead->colNo);
+    type1 = objectNode->object->paramAttrs->type;
+    if(lookAhead->tokenType != SB_COMMA)
+      error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, lookAhead->lineNo, lookAhead->colNo);
   }
-  
+  else
+  {
+    if(lookAhead->tokenType != SB_RPAR)
+      error(ERR_PARAMETERS_ARGUMENTS_INCONSISTENCY, lookAhead->lineNo, lookAhead->colNo);
+    return;
+  }
+    eat(SB_COMMA);
+    type2 = compileExpression();
+    checkParamArg(type1, type2);
+    compileArguments2(objectNode->next);
 }
 
 void compileCondition(void) {

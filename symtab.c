@@ -194,6 +194,7 @@ Object* createParameterObject(char *name, enum ParamKind kind, Object* owner) {
   param->kind = OBJ_PARAMETER;
   param->paramAttrs = (ParameterAttributes*) malloc(sizeof(ParameterAttributes));
   param->paramAttrs->kind = kind;
+  param->paramAttrs->function = owner;
 
   return param;
 
